@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
+using Microsoft.PowerShell;
+
 
 namespace GitRelease
 {
@@ -14,7 +16,7 @@ namespace GitRelease
     {
         static void Main(string[] args)
         {
-            AsyncReleaseMethod();
+            AsyncReleaseMethod("jennyf19", "schedlua", "v1.0.1");
             Console.ReadLine();
         }
 
@@ -27,20 +29,20 @@ namespace GitRelease
         /// a markdown can be included. newRelease.Draft and newRelease.Prerelease are booleans and
         /// the defaults for both is false. 
         /// </summary>
-        public static async void AsyncReleaseMethod()
+        public static async void AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName)
         {
             //A plain GitHubClient is created. You can use the default string for ProduceHeaderValue or enter your own.
-            var client = new GitHubClient(new ProductHeaderValue(""));
+            var client = new GitHubClient(new ProductHeaderValue("Testing"));
 
             //Enter a personal access token for the repo you want to release.
-            var tokenAuth = new Credentials("");
-
+            var tokenAuth = new Credentials("6bd7587728cafa7f00c81b071e68e76c73d11577");
+            
             client.Credentials = tokenAuth;
 
             //Enter ("GitHub Account Name", "Repo Name", and "Tag Name or Version Number (v1.0.0)" for the release)
-            string gitHubAccountName = "";
-            string repoName = "";
-            string tagName = "";
+            //var gitHubAccountName = "jennyf19";
+            //var repoName = "schedlua";
+            //var tagName = "v1.0.0";
             Repository result = await client.Repository.Get(gitHubAccountName, repoName);
             Console.WriteLine("The Repo Id is: " + result.Id);
             Console.WriteLine("The GitURL for the repo is: " + result.GitUrl);
@@ -51,7 +53,7 @@ namespace GitRelease
             var newRelease = new NewRelease(tagName);
 
             //Enter the name of the release
-            newRelease.Name = "";
+            newRelease.Name = "This is a test";
 
             //Include any information you would like to share with the user in the markdown
             newRelease.Body = "This is the markdown";

@@ -19,65 +19,36 @@ namespace GitRelease
     {
         static void Main(string[] args)
         {
+            System.Console.WriteLine("parameter count = {0}", args.Length);
 
-           Options options = new Options();
-             Parser parser = new Parser();
-             if (parser.ParseArguments(args, options))
-             {
-                 if (options.Verbose)
-                 {
-                     Console.WriteLine(options.InputName);
-                     Console.WriteLine(options.InputRepoName);
-                     Console.WriteLine(options.InputTagName);
-                     Console.WriteLine(options.InputAccessToken);
-                 }
-                 else
-                     Console.WriteLine("working...");
-             }
-             else
-             {
-                 Console.WriteLine("Doing something random");
-             }
-            Console.WriteLine("Enter your GitHub Account Name: ");
+            string repoName = args[1];
+            string gitHubAccountName = args[0];
+            string tagName = args[2];
+
+            for (int i = 0; i < args.Length; i++)
+            {
+                System.Console.WriteLine("Arg[{0}] = [{1}]", i, args[i]);
+            }
+
+            /*Console.WriteLine("Enter your GitHub Account Name: ");
             string gitHubAccountName = (Console.ReadLine());
+            gitHubAccountName = args[0];
 
             Console.WriteLine("Enter the name of the repo to be released: ");
             string repoName = (Console.ReadLine());
+            repoName = args[1];
 
             Console.WriteLine("Enter a tag name for the repo (ex. v1.0.0): ");
-            string tagName = (Console.ReadLine());
+            string tagName = (Console.ReadLine());*/
+
+           
 
             AsyncReleaseMethod(gitHubAccountName, repoName, tagName);
 
             Console.ReadLine();
         }
 
-        class Options
-        {
-            [Option('g', "Name", Required = true, HelpText = "Input your GitHub Account Name.")]
-            public string InputName { get; set; }
 
-            [Option('r', "repoName", Required = true, HelpText = "Input your RepoName.")]
-            public string InputRepoName { get; set; }
-
-            [Option('t', "tagName", Required = true, HelpText = "Input a tag name (ex. v1.0.0")]
-            public string InputTagName { get; set; }
-
-            [Option('a', "accessToken", Required = true, HelpText = "Input your personal access token")]
-            public string InputAccessToken { get; set; }
-
-            [Option('v', null, HelpText = "Print details during execution")]
-            public bool Verbose { get; set; }
-
-            [HelpOption]
-            public string GetUsage()
-            {
-                var usage = new StringBuilder();
-                usage.AppendLine("Quickstart Application 1.0");
-                usage.AppendLine("Read user manual for usage instructions...");
-                return usage.ToString();
-            }
-        }
         #region Methods
         /// <summary>
         /// The AsyncRelease Method is an asyncronous method. 
@@ -87,7 +58,7 @@ namespace GitRelease
         /// a markdown can be included. newRelease.Draft and newRelease.Prerelease are booleans and
         /// the defaults for both is false. 
         /// </summary>
-        
+
         public static async void AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName)
         {
             //A plain GitHubClient is created. You can use the default string for ProduceHeaderValue or enter your own.
@@ -95,9 +66,9 @@ namespace GitRelease
 
             //Enter a personal access token for the repo you want to release.
             //var tokenAuth = new Credentials("");
-                  
+
             //Console.WriteLine("Enter your personal access token for the repo: ");
-            var accessToken = new Credentials("30aa51733b5b275875758ab2e6a5a06784f522fd");
+            var accessToken = new Credentials("");
             client.Credentials = accessToken;
 
             //Enter ("GitHub Account Name", "Repo Name", and "Tag Name or Version Number (v1.0.0)" for the release)

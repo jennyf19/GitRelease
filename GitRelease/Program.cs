@@ -1,17 +1,8 @@
 ﻿using Octokit;
-using Octokit.Helpers;
-using Octokit.Internal;
+
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-using System.Management.Automation;
-using System.Management.Automation.Runspaces;
-using CommandLine;
-using CommandLine.Text;
-using System.Diagnostics;
+
 
 namespace GitRelease
 {
@@ -21,10 +12,13 @@ namespace GitRelease
         {
             System.Console.WriteLine("parameter count = {0}", args.Length);
 
-            string repoName = args[1];
             string gitHubAccountName = args[0];
+            string repoName = args[1];
             string tagName = args[2];
-
+            string body = args[3];
+            //string releaseName = args[3];
+            //string body = args[4];
+            
             for (int i = 0; i < args.Length; i++)
             {
                 System.Console.WriteLine("Arg[{0}] = [{1}]", i, args[i]);
@@ -41,9 +35,7 @@ namespace GitRelease
             Console.WriteLine("Enter a tag name for the repo (ex. v1.0.0): ");
             string tagName = (Console.ReadLine());*/
 
-           
-
-            AsyncReleaseMethod(gitHubAccountName, repoName, tagName);
+            AsyncReleaseMethod(gitHubAccountName, repoName, tagName, body);
 
             Console.ReadLine();
         }
@@ -59,7 +51,7 @@ namespace GitRelease
         /// the defaults for both is false. 
         /// </summary>
 
-        public static async void AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName)
+        public static async void AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string body)
         {
             //A plain GitHubClient is created. You can use the default string for ProduceHeaderValue or enter your own.
             var client = new GitHubClient(new ProductHeaderValue("Testing"));
@@ -71,16 +63,8 @@ namespace GitRelease
             var accessToken = new Credentials("");
             client.Credentials = accessToken;
 
-            //Enter ("GitHub Account Name", "Repo Name", and "Tag Name or Version Number (v1.0.0)" for the release)
-            //var gitHubAccountName = "jennyf19";
-            //var repoName = "schedlua";
-            //var tagName = "v1.0.0";
-            Console.WriteLine(gitHubAccountName + ", " + repoName + ", " + tagName);
-
             Repository result = await client.Repository.Get(gitHubAccountName, repoName);
-            Console.WriteLine("The Repo Id is: " + result.Id);
-            Console.WriteLine("The GitURL for the repo is: " + result.GitUrl);
-
+            
             #region Create Tag
 
             //Enter the name of the repo to be released
@@ -89,12 +73,11 @@ namespace GitRelease
             //Enter the name of the release
             //Console.WriteLine("Enter the name of the release: ");
 
-            newRelease.Name = ("something here");
+            newRelease.Name = repoName;
 
             //Include any information you would like to share with the user in the markdown
-            //Console.WriteLine("Add information for the markdown: ");
-
-            newRelease.Body = ("something else here");
+           
+            newRelease.Body = body;
 
             //The Draft plag is used to indicate when a release should be published
             newRelease.Draft = false;

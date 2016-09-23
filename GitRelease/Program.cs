@@ -1,14 +1,63 @@
 ﻿using Octokit;
 using System;
 using System.Linq;
+using CommandLine;
+using CommandLine.Text;
 
 
 namespace GitRelease
 {
     class Program
     {
+        //class to receive parsed values
+        internal class Options
+        {
+            [Option('g', "GitHubAccount", Required = true, HelpText = "Enter the GitHub Account Name for the repository you want to release")]
+            public string GitHubAccountName { get; set; }
+
+            [Option('r', "RepoName", Required = true, HelpText = "Enter the name of the repository you want to release")]
+            public string RepoName { get; set; }
+
+            [Option('t', "TagName", Required = true, HelpText = "Enter the tag name for the repository you want to release (ex. v1.0.0")]
+            public string TagName { get; set; }
+
+            [Option('p', "PersonalAccessToken", Required = true, HelpText = "Enter the personal access token for the account")]
+            public string PersonalAccessToken { get; set; }
+
+            [Option('m', "Markdown", Required = true, HelpText = "This is the markdown for the release")]
+            public string Markdown { get; set; }
+
+            [HelpOption]
+            public string GetUsage()
+            {
+                return HelpText.AutoBuild(this, current => HelpText.DefaultParsingErrorsHandler(this, current));
+            }
+        }
+
+
+
         static void Main(string[] args)
         {
+            var options = new Options();
+
+            if (!CommandLine.Parser.Default.ParseArguments(args, options))
+            {
+                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+            }
+
+            Console.WriteLine("g|itHubAccount: " + options.GitHubAccountName);
+
+            Console.WriteLine("r|epoName: " + options.RepoName);
+
+            Console.WriteLine("t|agName: " + options.TagName);
+
+            Console.WriteLine("p|ersonalAccessToken: " + options.PersonalAccessToken);
+
+            Console.WriteLine("m|arkdown: " + options.Markdown);
+
+
+            //Console.WriteLine("b|ool: " + options.BooleanValue.ToString().ToLowerInvariant());
+
             Console.WriteLine("\nParameter count for GitRelease = {0}", args.Length);
 
             string gitHubAccountName = args[0];
@@ -21,19 +70,8 @@ namespace GitRelease
 
             for (int i = 0; i < args.Length; i++)
             {
-                 Console.WriteLine("Arg[{0}] = [{1}]", i, args[i]);
+                Console.WriteLine("Arg[{0}] = [{1}]", i, args[i]);
             }
-
-            /*Console.WriteLine("Enter your GitHub Account Name: ");
-            string gitHubAccountName = (Console.ReadLine());
-            gitHubAccountName = args[0];
-
-            Console.WriteLine("Enter the name of the repo to be released: ");
-            string repoName = (Console.ReadLine());
-            repoName = args[1];
-
-            Console.WriteLine("Enter a tag name for the repo (ex. v1.0.0): ");
-            string tagName = (Console.ReadLine());*/
 
             AsyncReleaseMethod(gitHubAccountName, repoName, tagName, accessToken, body);
 

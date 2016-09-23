@@ -15,10 +15,9 @@ namespace GitRelease
             string gitHubAccountName = args[0];
             string repoName = args[1];
             string tagName = args[2];
-            string body = args[3];
-            //string releaseName = args[3];
-            //string body = args[4];
-            
+            string accessToken = args[3];
+            string body = args[4];
+
             for (int i = 0; i < args.Length; i++)
             {
                 System.Console.WriteLine("Arg[{0}] = [{1}]", i, args[i]);
@@ -35,7 +34,7 @@ namespace GitRelease
             Console.WriteLine("Enter a tag name for the repo (ex. v1.0.0): ");
             string tagName = (Console.ReadLine());*/
 
-            AsyncReleaseMethod(gitHubAccountName, repoName, tagName, body);
+            AsyncReleaseMethod(gitHubAccountName, repoName, tagName, accessToken, body);
 
             Console.ReadLine();
         }
@@ -51,7 +50,7 @@ namespace GitRelease
         /// the defaults for both is false. 
         /// </summary>
 
-        public static async void AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string body)
+        public static async void AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string accessToken, string body)
         {
             //A plain GitHubClient is created. You can use the default string for ProduceHeaderValue or enter your own.
             var client = new GitHubClient(new ProductHeaderValue("Testing"));
@@ -60,11 +59,11 @@ namespace GitRelease
             //var tokenAuth = new Credentials("");
 
             //Console.WriteLine("Enter your personal access token for the repo: ");
-            var accessToken = new Credentials("");
-            client.Credentials = accessToken;
+            var inputAccessToken = new Credentials(accessToken);
+            client.Credentials = inputAccessToken;
 
             Repository result = await client.Repository.Get(gitHubAccountName, repoName);
-            
+
             #region Create Tag
 
             //Enter the name of the repo to be released
@@ -76,7 +75,7 @@ namespace GitRelease
             newRelease.Name = repoName;
 
             //Include any information you would like to share with the user in the markdown
-           
+
             newRelease.Body = body;
 
             //The Draft plag is used to indicate when a release should be published

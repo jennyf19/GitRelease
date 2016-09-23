@@ -1,5 +1,4 @@
 ﻿using Octokit;
-
 using System;
 using System.Linq;
 
@@ -10,7 +9,7 @@ namespace GitRelease
     {
         static void Main(string[] args)
         {
-            System.Console.WriteLine("parameter count = {0}", args.Length);
+            Console.WriteLine("\nParameter count for GitRelease = {0}", args.Length);
 
             string gitHubAccountName = args[0];
             string repoName = args[1];
@@ -18,9 +17,11 @@ namespace GitRelease
             string accessToken = args[3];
             string body = args[4];
 
+            Console.WriteLine("\nThe input order is:\nGitHub Account Name, Repo Name, Tag Name, Personal Access Token, and Markdown\nYou entered:");
+
             for (int i = 0; i < args.Length; i++)
             {
-                System.Console.WriteLine("Arg[{0}] = [{1}]", i, args[i]);
+                 Console.WriteLine("Arg[{0}] = [{1}]", i, args[i]);
             }
 
             /*Console.WriteLine("Enter your GitHub Account Name: ");
@@ -53,7 +54,7 @@ namespace GitRelease
         public static async void AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string accessToken, string body)
         {
             //A plain GitHubClient is created. You can use the default string for ProduceHeaderValue or enter your own.
-            var client = new GitHubClient(new ProductHeaderValue("Testing"));
+            var client = new GitHubClient(new ProductHeaderValue("Release"));
 
             //Enter a personal access token for the repo you want to release.
             //var tokenAuth = new Credentials("");
@@ -92,7 +93,7 @@ namespace GitRelease
 
             var newReleaseResult = await client.Repository.Release.Create(result.Id, newRelease);
 
-            Console.WriteLine("Created release tag: {0}", tagName);
+            Console.WriteLine("\nCreated release tag: {0}", tagName);
 
             var tagsResult = await client.Repository.GetAllTags(result.Id);
 
@@ -100,7 +101,7 @@ namespace GitRelease
 
             NewRelease data = newRelease;
 
-            Console.WriteLine("Release of " + repoName + " complete");
+            Console.WriteLine("\nRelease of " + repoName + " complete");
 
             Console.ReadLine();
         }

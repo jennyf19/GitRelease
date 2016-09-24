@@ -33,16 +33,14 @@ namespace GitRelease
                 return HelpText.AutoBuild(this, current => HelpText.DefaultParsingErrorsHandler(this, current));
             }
         }
-
-
-
+        
         static void Main(string[] args)
         {
             var options = new Options();
 
-            if (!CommandLine.Parser.Default.ParseArguments(args, options))
+            if (Parser.Default.ParseArguments(args, options))
             {
-                Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+                Environment.Exit(Parser.DefaultExitCodeFail);
             }
 
             Console.WriteLine("g|itHubAccount: " + options.GitHubAccountName);
@@ -55,10 +53,15 @@ namespace GitRelease
 
             Console.WriteLine("m|arkdown: " + options.Markdown);
 
-
             //Console.WriteLine("b|ool: " + options.BooleanValue.ToString().ToLowerInvariant());
 
-            Console.WriteLine("\nParameter count for GitRelease = {0}", args.Length);
+            /*Console.WriteLine("\nParameter count for GitRelease = {0}", args.Length);
+
+            options.GitHubAccountName = args[0];
+            options.RepoName = args[1];
+            options.TagName = args[2];
+            options.PersonalAccessToken = args[3];
+            options.Markdown = args[4];
 
             string gitHubAccountName = args[0];
             string repoName = args[1];
@@ -71,59 +74,19 @@ namespace GitRelease
             for (int i = 0; i < args.Length; i++)
             {
                 Console.WriteLine("Arg[{0}] = [{1}]", i, args[i]);
-            }
+            }*/
+            string GitHubAccountName = options.GitHubAccountName;
+            string RepoName = options.RepoName;
+            string TagName = options.TagName;
+            string PersonalAccessToken = options.PersonalAccessToken;
+            string Markdown = options.Markdown;
 
-            AsyncReleaseMethod(gitHubAccountName, repoName, tagName, accessToken, body);
+            AsyncReleaseMethod(GitHubAccountName, RepoName, TagName, PersonalAccessToken, Markdown);
 
             Console.ReadLine();
         }
 
-
-        #region Methods
-        /// <summary>
-        /// The AsyncRelease Method is an asyncronous method. 
-        /// It creates a plain GitHubClient that includes a User-Agent header.
-        /// Authenticated access to the repo is used via personal access token.
-        /// The repo is tagged and released with the new of the repo, a name for the release, and
-        /// a markdown can be included. newRelease.Draft and newRelease.Prerelease are booleans and
-        /// the defaults for both is false. 
-        /// </summary>
-
-        public static async void AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string accessToken, string body)
-        {
-            //A plain GitHubClient is created. You can use the default string for ProduceHeaderValue or enter your own.
-            var client = new GitHubClient(new ProductHeaderValue("Release"));
-
-            //Enter a personal access token for the repo you want to release.
-            //var tokenAuth = new Credentials("");
-
-            //Console.WriteLine("Enter your personal access token for the repo: ");
-            var inputAccessToken = new Credentials(accessToken);
-            client.Credentials = inputAccessToken;
-
-            Repository result = await client.Repository.Get(gitHubAccountName, repoName);
-
-            #region Create Tag
-
-            //Enter the name of the repo to be released
-            var newRelease = new NewRelease(tagName);
-
-            //Enter the name of the release
-            //Console.WriteLine("Enter the name of the release: ");
-
-            newRelease.Name = repoName;
-
-            //Include any information you would like to share with the user in the markdown
-
-            newRelease.Body = body;
-
-            //The Draft plag is used to indicate when a release should be published
-            newRelease.Draft = false;
-
-            //Indicates whether a release is unofficial or preview release
-            newRelease.Prerelease = false;
-
-            #endregion
+       
 
             #region The Release
 
@@ -131,7 +94,7 @@ namespace GitRelease
 
             var newReleaseResult = await client.Repository.Release.Create(result.Id, newRelease);
 
-            Console.WriteLine("\nCreated release tag: {0}", tagName);
+            Console.WriteLine("\nCreated release tag: {0}", TagName);
 
             var tagsResult = await client.Repository.GetAllTags(result.Id);
 
@@ -139,7 +102,7 @@ namespace GitRelease
 
             NewRelease data = newRelease;
 
-            Console.WriteLine("\nRelease of " + repoName + " complete");
+            Console.WriteLine("\nRelease of " + RepoName + " complete");
 
             Console.ReadLine();
         }

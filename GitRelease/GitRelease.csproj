@@ -101,6 +101,12 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GitReleaseLibrary\GitReleaseLibrary.csproj">
+      <Project>{75573a28-b92e-45cf-8c54-4b3d61c4db8a}</Project>
+      <Name>GitReleaseLibrary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -14,10 +14,39 @@ namespace GitReleaseLibrary
         public string TagName { get; set; }
         public string PersonalAccessToken { get; set; }
         public string Markdown { get; set; }
-        
+
         public async void AsyncAuthenticationMethod()
         {
-            //A plain GitHubClient is created. You can use the default string for ProduceHeaderValue or enter your own.
+            var client = new GitHubClient(new ProductHeaderValue("Release"));
+
+            new Credentials(PersonalAccessToken);
+
+            Repository result = await client.Repository.Get(GitHubAccountName, RepoName);
+
+            var newRelease = new NewRelease(TagName);
+
+            newRelease.Name = RepoName;
+
+            newRelease.Body = Markdown;
+
+            newRelease.Draft = false;
+
+            newRelease.Prerelease = false;
+
+            //NewRelease data = newRelease;    
+
+            // await client.Repository.Release.Create(GitHubAccountName, RepoName, newRelease);
+
+            await client.Repository.Release.Create(result.Id, newRelease);
+            
+            //var tagsResult = await client.Repository.GetAllTags(result.Id);
+
+            //var tag = tagsResult.FirstOrDefault();
+
+            //NewRelease data = newRelease;
+
+
+            /*//A plain GitHubClient is created. You can use the default string for ProduceHeaderValue or enter your own.
             var client = new GitHubClient(new ProductHeaderValue("Release"));
 
             //Enter a personal access token for the repo you want to release.
@@ -50,8 +79,8 @@ namespace GitReleaseLibrary
             newRelease.Prerelease = false;
             #endregion
 
-            var newReleaseResult = await client.Repository.Release.Create(result.Id, newRelease);
-
+            await client.Repository.Release.Create(result.Id, newRelease);
+            /*var newReleaseResult = await client.Repository.Release.Create(result.Id, newRelease);
             Console.WriteLine("\nCreated release tag: {0}", TagName);
 
             var tagsResult = await client.Repository.GetAllTags(result.Id);
@@ -60,7 +89,7 @@ namespace GitReleaseLibrary
 
             NewRelease data = newRelease;
 
-            Console.WriteLine("\nRelease of " + RepoName + " complete");
+            Console.WriteLine("\nRelease of " + RepoName + " complete");*/
 
             Console.ReadLine();
         }

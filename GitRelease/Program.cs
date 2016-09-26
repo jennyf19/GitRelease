@@ -60,14 +60,10 @@ namespace GitRelease
             string Markdown = options.Markdown;
 
             ReleaseAutomator releaseautomator = new ReleaseAutomator();
-            
+
             Console.ReadLine();
         }
-
-
-
     }
-
 }
 
 

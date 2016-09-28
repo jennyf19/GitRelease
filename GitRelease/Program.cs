@@ -41,6 +41,7 @@ namespace GitRelease
             if (!Parser.Default.ParseArguments(args, options))
             {
                 Environment.Exit(Parser.DefaultExitCodeFail);
+                Console.ReadLine();
             }
 
             Console.WriteLine("g|itHubAccount: " + options.GitHubAccountName);

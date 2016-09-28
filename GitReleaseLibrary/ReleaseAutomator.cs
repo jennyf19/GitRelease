@@ -29,18 +29,18 @@ namespace GitReleaseLibrary
                     client.Credentials = tokenAuth;
                 }
                 //Personal Access Token is invalid
-                catch (AuthorizationException e)
+                catch (ApiException e)
                 {
                     Console.WriteLine(e);
                 }
 
-                //new Credentials(PersonalAccessToken);
                 try
                 {
                     Repository result = await client.Repository.Get(GitHubAccountName, RepoName);
 
+                    //All of the set parameters below must be correct (not case sensitive)
+                    //If the TagName is equal to a tag name already used in a release, an exception will occur
                     //Create Tag
-
                     var newRelease = new NewRelease(TagName);
 
                     newRelease.Name = RepoName;
@@ -53,22 +53,26 @@ namespace GitReleaseLibrary
 
                     try
                     {
-                        var newReleaseResult = await client.Repository.Release.Create(result.Id, newRelease);
+                        await client.Repository.Release.Create(result.Id, newRelease);
 
                         Console.WriteLine("\nRelease of " + RepoName + " complete");
                     }
-                    catch (NotFoundException e4)
+                    catch (ApiValidationException e4)
                     {
                         Console.WriteLine(e4);
                     }
+                    catch (ApiException e4a)
+                    {
+                        Console.WriteLine(e4a);
+                    }
                 }
-                //Either the GitHubAccountName or the RepoName are incorrect
+                
                 catch (NotFoundException e3)
                 {
                     Console.WriteLine(e3);
                 }
             }
-            catch (ApiException e1)
+            catch (AuthorizationException e1)
             {
                 Console.WriteLine(e1);
             }

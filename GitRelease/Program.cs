@@ -14,7 +14,7 @@ namespace GitRelease
         {
             [Option('g', "GitHubAccount", Required = true, HelpText = "Enter the GitHub Account Name for the repository you want to release")]
             public string GitHubAccountName { get; set; }
-
+            
             [Option('r', "RepoName", Required = true, HelpText = "Enter the name of the repository you want to release")]
             public string RepoName { get; set; }
 
@@ -38,7 +38,7 @@ namespace GitRelease
         {
             var options = new Options();
 
-            if (Parser.Default.ParseArguments(args, options))
+            if (!Parser.Default.ParseArguments(args, options))
             {
                 Environment.Exit(Parser.DefaultExitCodeFail);
             }
@@ -60,7 +60,8 @@ namespace GitRelease
             string Markdown = options.Markdown;
 
             ReleaseAutomator releaseautomator = new ReleaseAutomator();
-
+            releaseautomator.AsyncAuthenticationMethod(GitHubAccountName, RepoName, TagName, PersonalAccessToken, Markdown);
+            
             Console.ReadLine();
         }
     }

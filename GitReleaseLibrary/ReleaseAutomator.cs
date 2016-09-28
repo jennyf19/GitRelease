@@ -15,83 +15,63 @@ namespace GitReleaseLibrary
         public string PersonalAccessToken { get; set; }
         public string Markdown { get; set; }
 
-        public async void AsyncAuthenticationMethod()
+        public async void AsyncAuthenticationMethod(string GitHubAccountName, string RepoName, string TagName, string PersonalAccessToken, string Markdown)
         {
-            var client = new GitHubClient(new ProductHeaderValue("Release"));
+            //Test connection to GitHub API
+            try
+            {
+                var client = new GitHubClient(new ProductHeaderValue("Release"));
 
-            new Credentials(PersonalAccessToken);
+                try
+                {
+                    var tokenAuth = new Credentials(PersonalAccessToken);
 
-            Repository result = await client.Repository.Get(GitHubAccountName, RepoName);
+                    client.Credentials = tokenAuth;
+                }
+                //Personal Access Token is invalid
+                catch (AuthorizationException e)
+                {
+                    Console.WriteLine(e);
+                }
 
-            var newRelease = new NewRelease(TagName);
+                //new Credentials(PersonalAccessToken);
+                try
+                {
+                    Repository result = await client.Repository.Get(GitHubAccountName, RepoName);
 
-            newRelease.Name = RepoName;
+                    //Create Tag
 
-            newRelease.Body = Markdown;
+                    var newRelease = new NewRelease(TagName);
 
-            newRelease.Draft = false;
+                    newRelease.Name = RepoName;
 
-            newRelease.Prerelease = false;
+                    newRelease.Body = Markdown;
 
-            //NewRelease data = newRelease;    
+                    newRelease.Draft = false;
 
-            // await client.Repository.Release.Create(GitHubAccountName, RepoName, newRelease);
+                    newRelease.Prerelease = false;
 
-            await client.Repository.Release.Create(result.Id, newRelease);
-            
-            //var tagsResult = await client.Repository.GetAllTags(result.Id);
+                    try
+                    {
+                        var newReleaseResult = await client.Repository.Release.Create(result.Id, newRelease);
 
-            //var tag = tagsResult.FirstOrDefault();
-
-            //NewRelease data = newRelease;
-
-
-            /*//A plain GitHubClient is created. You can use the default string for ProduceHeaderValue or enter your own.
-            var client = new GitHubClient(new ProductHeaderValue("Release"));
-
-            //Enter a personal access token for the repo you want to release.
-            //var tokenAuth = new Credentials("");
-
-            //Console.WriteLine("Enter your personal access token for the repo: ");
-            var inputAccessToken = new Credentials(PersonalAccessToken);
-            client.Credentials = inputAccessToken;
-
-            Repository result = await client.Repository.Get(GitHubAccountName, RepoName);
-        
-            #region Create Tag
-
-            //Enter the name of the repo to be released
-            var newRelease = new NewRelease(TagName);
-
-            //Enter the name of the release
-            //Console.WriteLine("Enter the name of the release: ");
-
-            newRelease.Name = RepoName;
-
-            //Include any information you would like to share with the user in the markdown
-
-            newRelease.Body = Markdown;
-
-            //The Draft plag is used to indicate when a release should be published
-            newRelease.Draft = false;
-
-            //Indicates whether a release is unofficial or preview release
-            newRelease.Prerelease = false;
-            #endregion
-
-            await client.Repository.Release.Create(result.Id, newRelease);
-            /*var newReleaseResult = await client.Repository.Release.Create(result.Id, newRelease);
-            Console.WriteLine("\nCreated release tag: {0}", TagName);
-
-            var tagsResult = await client.Repository.GetAllTags(result.Id);
-
-            var tag = tagsResult.FirstOrDefault();
-
-            NewRelease data = newRelease;
-
-            Console.WriteLine("\nRelease of " + RepoName + " complete");*/
-
-            Console.ReadLine();
+                        Console.WriteLine("\nRelease of " + RepoName + " complete");
+                    }
+                    catch (NotFoundException e4)
+                    {
+                        Console.WriteLine(e4);
+                    }
+                }
+                //Either the GitHubAccountName or the RepoName are incorrect
+                catch (NotFoundException e3)
+                {
+                    Console.WriteLine(e3);
+                }
+            }
+            catch (ApiException e1)
+            {
+                Console.WriteLine(e1);
+            }
         }
     }
 }

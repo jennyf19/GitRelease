@@ -3,72 +3,86 @@ using Octokit;
 using NUnit;
 using System;
 using System.Linq;
+using Octokit.Internal;
+using CommandLine;
+using CommandLine.Text;
+
 
 namespace UnitTestProject
 {
+    public class Options
+    {
+        /*[Option('g', "GitHubAccount", Required = true, HelpText = "Enter the GitHub Account Name for the repository you want to release")]
+       public string GitHubAccountName { get; set; }
+
+      [Option('r', "RepoName", Required = true, HelpText = "Enter the name of the repository you want to release")]
+       public string RepoName { get; set; }*/
+    }
+
     public class AsyncReleaseMethodTest
     {
-        [Fact]
-        public void ReturnCredentials()
+
+        public class ReleaseAutomator
         {
-            var client = new GitHubClient(new ProductHeaderValue("Release"));
+            
+            public string GitHubAccountName { get; set; }
+            public string RepoName { get; set; }
+            public string TagName { get; set; }
+            public string PersonalAccessToken { get; set; }
+            public string Markdown { get; set; }
 
-            string PersonalAccessToken = "e37dca0b4c9672bec7583a70df03202adfc00063";
+            public async void AsyncAuthenticationMethod(string GitHubAccountName, string RepoName, string TagName, string PersonalAccessToken, string Markdown)
+            {
+                try
+                {
+                    var client = new GitHubClient(new ProductHeaderValue("Release"));
 
-            new Credentials(PersonalAccessToken);
+                    try
+                    {
+                        var tokenAuth = new Credentials(PersonalAccessToken);
 
-            //PersonalAccessToken = client.Credentials.ToString();
-            Assert.True(true, PersonalAccessToken);
-        }
-        [Fact]
-        public async void ReleaseRepoTest()
-        {
-            string GitHubAccountName = "jennyf19";
-            string RepoName = "BinaryTree";
-            string TagName = "v1.1.32";
-            string Markdown = "something here";
-            string PersonalAccessToken = "e37dca0b4c9672bec7583a70df03202adfc00063";
+                        client.Credentials = tokenAuth;
+                    }
 
-            var client = new GitHubClient(new ProductHeaderValue("Release"));
+                    catch (AuthorizationException e)
+                    {
+                        Console.WriteLine("Your personal access token is invalid", e);
+                    }
 
-            new Credentials(PersonalAccessToken);
+                    //new Credentials(PersonalAccessToken);
 
-            Repository result = await client.Repository.Get(GitHubAccountName, RepoName);
+                    Repository result = await client.Repository.Get(GitHubAccountName, RepoName);
+                }
+                catch (ApiException e1)
+                {
+                    Console.WriteLine(e1);
+                }
 
-            var newRelease = new NewRelease(TagName);
 
-            newRelease.Name = RepoName;
+                /*[Fact]
+                public void CommandLineInputGitHubAccountName()
+                {
+                    var options = new Options();
 
-            newRelease.Body = Markdown;
+                    string GitHubAccountName = options.GitHubAccountName;
+                    Assert.Contains("jennyf19", GitHubAccountName);
+                }
 
-            newRelease.Draft = false;
+                 [Fact]
+                 public void CommandLineInputRepoName()
+                 {
+                     var options = new Options();
+                     string RepoName = options.RepoName;
+                     Assert.Contains(RepoName, "binaryTree");*/
 
-            newRelease.Prerelease = false;
-
-            //NewRelease data = newRelease;    
-
-            await client.Repository.Release.Create(GitHubAccountName, RepoName, newRelease);
-               // (result.Id, newRelease);
-
-            //await client.Repository.Release.Create(result.Id, newRelease);
-
-            //var newReleaseResult = await client.Repository.Release.Create(result.Id, newRelease);
-            //var tagsResult = await client.Repository.GetAllTags(result.Id);
-
-            //var tagsResult = await client.Repository.GetAllTags(result.Id);
-
-            //var tag = tagsResult.FirstOrDefault();
-
-            //NewRelease data = newRelease;
-
-            //Assert.True(true, PersonalAccessToken);
-
-            Assert.True(true, result.ToString()); 
-
+            }
 
         }
-
     }
 }
+
+
+
+
 
 

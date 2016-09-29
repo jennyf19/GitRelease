@@ -4,6 +4,7 @@ using System.Linq;
 using CommandLine;
 using CommandLine.Text;
 using GitReleaseLibrary;
+using System.Text.RegularExpressions;
 
 namespace GitRelease
 {
@@ -14,7 +15,7 @@ namespace GitRelease
         {
             [Option('g', "GitHubAccount", Required = true, HelpText = "Enter the GitHub Account Name for the repository you want to release")]
             public string GitHubAccountName { get; set; }
-            
+
             [Option('r', "RepoName", Required = true, HelpText = "Enter the name of the repository you want to release")]
             public string RepoName { get; set; }
 
@@ -37,33 +38,58 @@ namespace GitRelease
         static void Main(string[] args)
         {
             var options = new Options();
-
             if (!Parser.Default.ParseArguments(args, options))
             {
                 Environment.Exit(Parser.DefaultExitCodeFail);
                 Console.ReadLine();
             }
+            try
+            {
+                string GitHubAccountName = options.GitHubAccountName;
+                string RepoName = options.RepoName;
+                string TagName = options.TagName;
+                string PersonalAccessToken = options.PersonalAccessToken;
+                string Markdown = options.Markdown;
 
-            Console.WriteLine("g|itHubAccount: " + options.GitHubAccountName);
+                Regex TagNamePattern = new Regex("^[v0-9][.][0-9][.][0-9]$");      
 
-            Console.WriteLine("r|epoName: " + options.RepoName);
+                Console.WriteLine("The tag name is " + TagName);
+                Console.WriteLine("The tag name pattern is " + TagNamePattern);
+                try
+                {
+                    if (Regex.IsMatch(TagName, TagNamePattern.ToString()) && TagName != null)
+                    {
+                        TagName = TagNamePattern.ToString();
+                    }
+                }
+                catch (Exception a)
+                {
+                    throw new Exception("The tag name must be in the following format: v1.0.0");
+                }
 
-            Console.WriteLine("t|agName: " + options.TagName);
 
-            Console.WriteLine("p|ersonalAccessToken: " + options.PersonalAccessToken);
 
-            Console.WriteLine("m|arkdown: " + options.Markdown);
+                Console.WriteLine("g|itHubAccount: " + options.GitHubAccountName);
 
-            string GitHubAccountName = options.GitHubAccountName;
-            string RepoName = options.RepoName;
-            string TagName = options.TagName;
-            string PersonalAccessToken = options.PersonalAccessToken;
-            string Markdown = options.Markdown;
+                Console.WriteLine("r|epoName: " + options.RepoName);
 
-            ReleaseAutomator releaseautomator = new ReleaseAutomator();
-            releaseautomator.AsyncAuthenticationMethod(GitHubAccountName, RepoName, TagName, PersonalAccessToken, Markdown);
-            
-            Console.ReadLine();
+                Console.WriteLine("t|agName: " + options.TagName);
+
+                Console.WriteLine("p|ersonalAccessToken: " + options.PersonalAccessToken);
+
+                Console.WriteLine("m|arkdown: " + options.Markdown);
+
+
+
+                ReleaseAutomator releaseautomator = new ReleaseAutomator();
+                releaseautomator.AsyncAuthenticationMethod(GitHubAccountName, RepoName, TagName, PersonalAccessToken, Markdown);
+
+                Console.ReadLine();
+            }
+            catch (Exception a1)
+            {
+                Console.WriteLine(a1);
+            }
         }
     }
 }

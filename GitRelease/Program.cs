@@ -25,9 +25,6 @@ namespace GitRelease
             [Option('p', "PersonalAccessToken", Required = true, HelpText = "Enter the personal access token for the account")]
             public string PersonalAccessToken { get; set; }
 
-            [Option('m', "Markdown", Required = true, HelpText = "This is the markdown for the release")]
-            public string Markdown { get; set; }
-
             [HelpOption]
             public string GetUsage()
             {
@@ -49,8 +46,7 @@ namespace GitRelease
                 string RepoName = options.RepoName;
                 string TagName = options.TagName;
                 string PersonalAccessToken = options.PersonalAccessToken;
-                string Markdown = options.Markdown;
-
+               
                 Regex TagNamePattern = new Regex("^[v0-9][.][0-9][.][0-9]$");      
 
                 Console.WriteLine("The tag name is " + TagName);
@@ -64,10 +60,8 @@ namespace GitRelease
                 }
                 catch (Exception a)
                 {
-                    throw new Exception("The tag name must be in the following format: v1.0.0");
+                    throw new Exception("The tag name must be in the following format: v1.0.0", a);
                 }
-
-
 
                 Console.WriteLine("g|itHubAccount: " + options.GitHubAccountName);
 
@@ -75,14 +69,10 @@ namespace GitRelease
 
                 Console.WriteLine("t|agName: " + options.TagName);
 
-                Console.WriteLine("p|ersonalAccessToken: " + options.PersonalAccessToken);
-
-                Console.WriteLine("m|arkdown: " + options.Markdown);
-
-
+                Console.WriteLine("p|ersonalAccessToken: " + options.PersonalAccessToken);              
 
                 ReleaseAutomator releaseautomator = new ReleaseAutomator();
-                releaseautomator.AsyncAuthenticationMethod(GitHubAccountName, RepoName, TagName, PersonalAccessToken, Markdown);
+                releaseautomator.AsyncAuthenticationMethod(GitHubAccountName, RepoName, TagName, PersonalAccessToken);
 
                 Console.ReadLine();
             }

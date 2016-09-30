@@ -13,8 +13,8 @@ namespace GitRelease
         {
             Regex TagNamePattern = new Regex(@"^v[1-9]\.([0-9][0-9]\.)([0-9][0-9])$");
 
-            Console.WriteLine("The tag name is " + TagName);
-            Console.WriteLine("The tag name pattern is " + TagNamePattern);
+            //Console.WriteLine("The tag name is " + TagName);
+            // Console.WriteLine("The tag name pattern is " + TagNamePattern);
 
             if (Regex.IsMatch(TagName, TagNamePattern.ToString()) && TagName != null)
             {
@@ -25,7 +25,7 @@ namespace GitRelease
             {
                 return false;
             }
-            
+
         }
     }
 }

@@ -40,6 +40,7 @@ namespace GitRelease
                 Environment.Exit(Parser.DefaultExitCodeFail);
                 Console.ReadLine();
             }
+            
             try
             {
                 string GitHubAccountName = options.GitHubAccountName;
@@ -47,9 +48,10 @@ namespace GitRelease
                 string TagName = options.TagName;
                 string PersonalAccessToken = options.PersonalAccessToken;
 
-                TagNameFormat tagNameFormat = new TagNameFormat();
+                TagNameFormatCheck tagNameFormatCheck = new TagNameFormatCheck();
+                tagNameFormatCheck.TagNameFormat(TagName);
 
-                if (TagNameFormat.TagNameFormatCheck(TagName) == true)
+             if  (tagNameFormatCheck.TagNameFormat(TagName) == true)
                 {
 
                     Console.WriteLine("g|itHubAccount: " + options.GitHubAccountName);
@@ -60,8 +62,8 @@ namespace GitRelease
 
                     Console.WriteLine("p|ersonalAccessToken: " + options.PersonalAccessToken);
 
-                    ReleaseAutomator releaseautomator = new ReleaseAutomator();
-                    releaseautomator.AsyncAuthenticationMethod(GitHubAccountName, RepoName, TagName, PersonalAccessToken);
+                    ReleaseAutomator releaseAutomator = new ReleaseAutomator();
+                    releaseAutomator.AsyncAuthenticationMethod(GitHubAccountName, RepoName, TagName, PersonalAccessToken);
 
                     Console.ReadLine();
                 }

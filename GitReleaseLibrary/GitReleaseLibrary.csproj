@@ -47,11 +47,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ITagNameFormatCheck.cs" />
     <Compile Include="ReleaseAutomator.cs" />
     <Compile Include="IReleaseAutomator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TagNameFormatCheck.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

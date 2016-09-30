@@ -8,7 +8,7 @@ namespace GitReleaseLibrary
 {
     interface IReleaseAutomator
     {
-        #region Methods
+
         /// <summary>
         /// The AsyncRelease Method is an asyncronous method. 
         /// It creates a plain GitHubClient that includes a User-Agent header.
@@ -22,10 +22,10 @@ namespace GitReleaseLibrary
         string RepoName { get; set; }
         string TagName { get; set; }
         string PersonalAccessToken { get; set; }
-       
+
 
         void AsyncAuthenticationMethod(string GitHubAccountName, string RepoName, string TagName, string PersonalAccessToken);
-        
-}
-    #endregion
+
+    }
+
 }

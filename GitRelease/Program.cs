@@ -46,41 +46,39 @@ namespace GitRelease
                 string RepoName = options.RepoName;
                 string TagName = options.TagName;
                 string PersonalAccessToken = options.PersonalAccessToken;
-               
-                Regex TagNamePattern = new Regex("^[v0-9][.][0-9][.][0-9]$");      
 
-                Console.WriteLine("The tag name is " + TagName);
-                Console.WriteLine("The tag name pattern is " + TagNamePattern);
-                try
+                TagNameFormat tagNameFormat = new TagNameFormat();
+
+                if (TagNameFormat.TagNameFormatCheck(TagName) == true)
                 {
-                    if (Regex.IsMatch(TagName, TagNamePattern.ToString()) && TagName != null)
-                    {
-                        TagName = TagNamePattern.ToString();
-                    }
+
+                    Console.WriteLine("g|itHubAccount: " + options.GitHubAccountName);
+
+                    Console.WriteLine("r|epoName: " + options.RepoName);
+
+                    Console.WriteLine("t|agName: " + options.TagName);
+
+                    Console.WriteLine("p|ersonalAccessToken: " + options.PersonalAccessToken);
+
+                    ReleaseAutomator releaseautomator = new ReleaseAutomator();
+                    releaseautomator.AsyncAuthenticationMethod(GitHubAccountName, RepoName, TagName, PersonalAccessToken);
+
+                    Console.ReadLine();
                 }
-                catch (Exception a)
+                else
                 {
-                    throw new Exception("The tag name must be in the following format: v1.0.0", a);
+                    Console.WriteLine("Tag name format invalid");
                 }
 
-                Console.WriteLine("g|itHubAccount: " + options.GitHubAccountName);
-
-                Console.WriteLine("r|epoName: " + options.RepoName);
-
-                Console.WriteLine("t|agName: " + options.TagName);
-
-                Console.WriteLine("p|ersonalAccessToken: " + options.PersonalAccessToken);              
-
-                ReleaseAutomator releaseautomator = new ReleaseAutomator();
-                releaseautomator.AsyncAuthenticationMethod(GitHubAccountName, RepoName, TagName, PersonalAccessToken);
-
-                Console.ReadLine();
             }
+
             catch (Exception a1)
             {
                 Console.WriteLine(a1);
             }
+
         }
+
     }
 }
 

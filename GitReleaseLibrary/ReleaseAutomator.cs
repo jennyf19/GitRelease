@@ -49,6 +49,7 @@ namespace GitReleaseLibrary
                         //All of the set parameters below must be correct (not case sensitive)
                         //If the TagName is equal to a tag name already used in a release, an exception will occur
                         //Create Tag
+
                         var newRelease = new NewRelease(TagName);
 
                         newRelease.Name = RepoName;

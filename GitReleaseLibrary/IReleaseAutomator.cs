@@ -22,7 +22,7 @@ namespace GitReleaseLibrary
         string RepoName { get; set; }
         string TagName { get; set; }
         string PersonalAccessToken { get; set; }
-        //string Markdown { get; set; }
+       
 
         void AsyncAuthenticationMethod(string GitHubAccountName, string RepoName, string TagName, string PersonalAccessToken);
         

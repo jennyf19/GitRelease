@@ -10,20 +10,23 @@ namespace GitRelease
 {
     class Program
     {
-        public static string GitHubAccountName;
-        public static string RepoName;
-        public static string TagName;
-        public static string PersonalAccessToken;
 
         static void Main(string[] args)
         {
-            
-            CommandLineOptions commandLineOptions = new CommandLineOptions();
-            commandLineOptions.CommandLineInput(args, GitHubAccountName, RepoName, TagName, PersonalAccessToken);
-            
+            CommandLineReleaseAutomator options = new CommandLineReleaseAutomator();
+
+            if (!Parser.Default.ParseArguments(args, options))
+            {
+                Environment.Exit(Parser.DefaultExitCodeFail);
+                Console.ReadLine();
+            }
+
+            string GitHubAccountName = options.GitHubAccountName;
+            string RepoName = options.RepoName;
+            string TagName = options.TagName;
+            string PersonalAccessToken = options.PersonalAccessToken;
             try
             {
-
                 TagNameFormatCheck tagNameFormatCheck = new TagNameFormatCheck();
                 tagNameFormatCheck.TagNameFormat(TagName);
 
@@ -38,21 +41,16 @@ namespace GitRelease
                 {
                     Console.WriteLine("Tag name format invalid: ", TagName);
                 }
-
             }
-
-
             catch (Exception a1)
             {
                 Console.WriteLine(a1);
             }
-
-
-
         }
-
     }
 }
+
+
 
 
 

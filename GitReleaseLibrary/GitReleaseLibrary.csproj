@@ -51,8 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandLineOptions.cs" />
-    <Compile Include="ICommandLineOptions.cs" />
+    <Compile Include="CommandLineReleaseAutomator.cs" />
+    <Compile Include="ICommandLineReleaseAutomator.cs" />
     <Compile Include="ITagNameFormatCheck.cs" />
     <Compile Include="ReleaseAutomator.cs" />
     <Compile Include="IReleaseAutomator.cs" />

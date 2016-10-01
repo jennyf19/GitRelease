@@ -14,7 +14,7 @@ namespace GitReleaseLibrary
         public string tagName { get; set; }
         public string personalAccessToken { get; set; }
         
-        public async void AsyncAuthenticationMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken)
+        public async void AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken)
         {
             //Test connection to GitHub API
             try

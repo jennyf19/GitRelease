@@ -10,7 +10,6 @@ namespace GitRelease
 {
     class Program
     {
-
         static void Main(string[] args)
         {
             CommandLineInputParser options = new CommandLineInputParser();
@@ -33,7 +32,7 @@ namespace GitRelease
                 if (tagNameFormatCheck.TagNameFormat(tagName) == true)
                 {
                     ReleaseAutomator releaseAutomator = new ReleaseAutomator();
-                    releaseAutomator.AsyncAuthenticationMethod(gitHubAccountName, repoName, tagName, personalAccessToken);
+                    releaseAutomator.AsyncReleaseMethod(gitHubAccountName, repoName, tagName, personalAccessToken);
 
                     Console.ReadLine();
                 }

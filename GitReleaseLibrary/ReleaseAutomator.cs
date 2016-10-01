@@ -9,12 +9,12 @@ namespace GitReleaseLibrary
 {
     public class ReleaseAutomator : IReleaseAutomator
     {
-        public string GitHubAccountName { get; set; }
-        public string RepoName { get; set; }
-        public string TagName { get; set; }
-        public string PersonalAccessToken { get; set; }
+        public string gitHubAccountName { get; set; }
+        public string repoName { get; set; }
+        public string tagName { get; set; }
+        public string personalAccessToken { get; set; }
         
-        public async void AsyncAuthenticationMethod(string GitHubAccountName, string RepoName, string TagName, string PersonalAccessToken)
+        public async void AsyncAuthenticationMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken)
         {
             //Test connection to GitHub API
             try
@@ -25,7 +25,7 @@ namespace GitReleaseLibrary
                 try
                 //ApiException e2
                 {
-                    var tokenAuth = new Credentials(PersonalAccessToken);
+                    var tokenAuth = new Credentials(personalAccessToken);
 
                     client.Credentials = tokenAuth;
                 }
@@ -38,21 +38,21 @@ namespace GitReleaseLibrary
                 try
                 //AuthorizationException e3
                 {
-                    Repository result = await client.Repository.Get(GitHubAccountName, RepoName);
+                    Repository result = await client.Repository.Get(gitHubAccountName, repoName);
 
                     try
                     //ApiException e4
                     {
-                        string readMe = await client.Repository.Content.GetReadmeHtml(GitHubAccountName, RepoName);
+                        string readMe = await client.Repository.Content.GetReadmeHtml(gitHubAccountName, repoName);
                         
 
                         //All of the set parameters below must be correct (not case sensitive)
                         //If the TagName is equal to a tag name already used in a release, an exception will occur
                         //Create Tag
 
-                        var newRelease = new NewRelease(TagName);
+                        var newRelease = new NewRelease(tagName);
 
-                        newRelease.Name = RepoName;
+                        newRelease.Name = repoName;
 
                         newRelease.Body = readMe.ToString();
 
@@ -65,7 +65,7 @@ namespace GitReleaseLibrary
                         {
                             await client.Repository.Release.Create(result.Id, newRelease);
 
-                            Console.WriteLine("\nRelease of " + RepoName + " complete");
+                            Console.WriteLine("\nRelease of " + repoName + " complete");
                         }
                         catch (ApiValidationException e5)
                         {

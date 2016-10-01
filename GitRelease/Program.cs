@@ -13,7 +13,7 @@ namespace GitRelease
 
         static void Main(string[] args)
         {
-            CommandLineReleaseAutomator options = new CommandLineReleaseAutomator();
+            CommandLineInputParser options = new CommandLineInputParser();
 
             if (!Parser.Default.ParseArguments(args, options))
             {
@@ -21,25 +21,25 @@ namespace GitRelease
                 Console.ReadLine();
             }
 
-            string GitHubAccountName = options.GitHubAccountName;
-            string RepoName = options.RepoName;
-            string TagName = options.TagName;
-            string PersonalAccessToken = options.PersonalAccessToken;
+            string gitHubAccountName = options.gitHubAccountName;
+            string repoName = options.repoName;
+            string tagName = options.tagName;
+            string personalAccessToken = options.personalAccessToken;
             try
             {
                 TagNameFormatCheck tagNameFormatCheck = new TagNameFormatCheck();
-                tagNameFormatCheck.TagNameFormat(TagName);
+                tagNameFormatCheck.TagNameFormat(tagName);
 
-                if (tagNameFormatCheck.TagNameFormat(TagName) == true)
+                if (tagNameFormatCheck.TagNameFormat(tagName) == true)
                 {
                     ReleaseAutomator releaseAutomator = new ReleaseAutomator();
-                    releaseAutomator.AsyncAuthenticationMethod(GitHubAccountName, RepoName, TagName, PersonalAccessToken);
+                    releaseAutomator.AsyncAuthenticationMethod(gitHubAccountName, repoName, tagName, personalAccessToken);
 
                     Console.ReadLine();
                 }
                 else
                 {
-                    Console.WriteLine("Tag name format invalid: ", TagName);
+                    Console.WriteLine("Tag name format invalid: ", tagName);
                 }
             }
             catch (Exception a1)

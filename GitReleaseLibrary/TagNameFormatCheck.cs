@@ -10,13 +10,13 @@ namespace GitReleaseLibrary
 {
     public class TagNameFormatCheck : ITagNameFormatCheck
     {
-        public string TagName { get; set; }
+        public string tagName { get; set; }
 
-        public bool TagNameFormat(string TagName)
+        public bool TagNameFormat(string tagName)
         {
-            Regex TagNamePattern = new Regex(@"^v[1-9]\.([0-9][0-9]\.)([0-9][0-9])$");
+            Regex tagNamePattern = new Regex(@"^v[1-9]\.([0-9][0-9]\.)([0-9][0-9])$");
 
-            if (Regex.IsMatch(TagName, TagNamePattern.ToString()) && TagName != null)
+            if (Regex.IsMatch(tagName, tagNamePattern.ToString()) && tagName != null)
             {
                 return true;
             }

@@ -8,8 +8,8 @@ namespace GitReleaseLibrary
 {
     interface ITagNameFormatCheck
     {
-        string TagName { get; set; }
+        string tagName { get; set; }
 
-        bool TagNameFormat(string TagName);
+        bool TagNameFormat(string tagName);
     }
 }

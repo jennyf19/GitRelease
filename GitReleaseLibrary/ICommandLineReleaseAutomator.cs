@@ -9,19 +9,19 @@ using CommandLine.Text;
 
 namespace GitReleaseLibrary
 {
-    interface ICommandLineReleaseAutomator
+    interface ICommandLineInputParser
     {
         [Option()]
-        string GitHubAccountName { get; set; }
+        string gitHubAccountName { get; set; }
 
         [Option()]
-        string RepoName { get; set; }
+        string repoName { get; set; }
 
         [Option()]
-        string TagName { get; set; }
+        string tagName { get; set; }
 
         [Option()]
-        string PersonalAccessToken { get; set; }
+        string personalAccessToken { get; set; }
 
     }
 }

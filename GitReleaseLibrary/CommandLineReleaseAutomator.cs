@@ -1,12 +1,10 @@
-﻿using System;
-using CommandLine;
+﻿using CommandLine;
 using CommandLine.Text;
 
 namespace GitReleaseLibrary
 {
     public class CommandLineInputParser : ICommandLineInputParser
     {
-
         [Option('g', "GitHubAccount", Required = true, HelpText = "Enter the GitHub Account Name for the repository you want to release")]
         public string gitHubAccountName { get; set; }
 

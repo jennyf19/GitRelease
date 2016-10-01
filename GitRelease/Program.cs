@@ -1,10 +1,6 @@
-﻿using Octokit;
-using System;
-using System.Linq;
+﻿using System;
 using CommandLine;
-using CommandLine.Text;
 using GitReleaseLibrary;
-using System.Text.RegularExpressions;
 
 namespace GitRelease
 {

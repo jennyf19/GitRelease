@@ -1,14 +1,27 @@
 ﻿using System;
 using CommandLine;
 using GitReleaseLibrary;
+using Autofac;
 
 namespace GitRelease
 {
     class Program
     {
+        private static IContainer Container { get; set; }
+
         static void Main(string[] args)
         {
-            CommandLineInputParser options = new CommandLineInputParser();
+            var builder = new ContainerBuilder();
+            builder.RegisterType<CommandLineInputParser>().As<ICommandLineInputParser>();
+            builder.RegisterType<TagNameFormatCheck>().As<ITagNameFormatCheck>();
+            builder.RegisterType<ReleaseAutomator>().As<IReleaseAutomator>();
+            Container = builder.Build();
+        
+            using (var scope = Container.BeginLifetimeScope())
+            {
+                var release = scope.Resolve<IReleaseAutomator>();
+            }
+                CommandLineInputParser options = new CommandLineInputParser();
 
             if (!Parser.Default.ParseArguments(args, options))
             {
@@ -44,6 +57,7 @@ namespace GitRelease
         }
     }
 }
+
 
 
 

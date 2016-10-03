@@ -13,11 +13,13 @@ namespace GitRelease
         {
             //Dependency injection 
             var builder = new ContainerBuilder();
+            //Register what instance of what class that should be provided for each interface with an IoC container
             builder.RegisterType<CommandLineInputParser>().As<ICommandLineInputParser>();
             builder.RegisterType<TagNameFormatCheck>().As<ITagNameFormatCheck>();
             builder.RegisterType<ReleaseAutomator>().As<IReleaseAutomator>();
             Container = builder.Build();
 
+            //Start the top level instance
             using (var scope = Container.BeginLifetimeScope())
             {
                 var release = scope.Resolve<IReleaseAutomator>();
@@ -58,7 +60,7 @@ namespace GitRelease
                 }
                 else
                 {
-                    Console.WriteLine("Tag name format invalid: ", tagName);
+                    Console.WriteLine("Tag name format invalid: " + tagName + "\nNeeds to be in the following format: \nv1.00.00");
                 }
             }
             catch (Exception a1)

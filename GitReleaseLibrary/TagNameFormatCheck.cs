@@ -9,9 +9,13 @@ namespace GitReleaseLibrary
 
         public bool TagNameFormat(string tagName)
         {
-            Regex tagNamePattern = new Regex(@"^v[1-9]\.([0-9][0-9]\.)([0-9][0-9])$");
+            if (tagName == null)
+            {
+                return false;
+            }
+            Regex tagNamePattern = new Regex(@"^v[1-9]\.([0-9]{0,2}\.)([0-9]{0,3})$");
 
-            if (Regex.IsMatch(tagName, tagNamePattern.ToString()) && tagName != null)
+            if (Regex.IsMatch(tagName, tagNamePattern.ToString()))
             {
                 return true;
             }

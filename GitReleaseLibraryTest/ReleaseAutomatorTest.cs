@@ -5,39 +5,17 @@ using GitReleaseLibrary;
 namespace GitReleaseLibraryTest
 {
     [TestClass]
-    public class ReleaseAutomatorTest
+    public class ReleaseAutomatorTestExceptedGitHubAccountName : IReleaseAutomator
     {
-        [TestMethod]
-        public void AsyncReleaseMethodGetClientTest()
-        {
-            string gitHubAccountName = "jennyf19";
-            string repoName = "binaryTree";
-            string tagName = "v1.11.11";
-            string personalAccessToken = "127c0389c7a3ca4854bde31a22cf99f4285d4028";
-
-            ReleaseAutomator releaseAutomator = new ReleaseAutomator();
-            releaseAutomator.AsyncReleaseMethod(gitHubAccountName, repoName, tagName, personalAccessToken);
-
-            Assert.IsTrue(true, "The build released");
-        }
+        string gitHubAccountName { get; set; }
+        string repoName { get; set; }
+        string tagName { get; set; }
+        string personalAccessToken { get; set; }
 
         [TestMethod]
-        public void AsyncReleaseMethodGetClientTestAccountNameIncorrect()
+        public void AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken)
         {
-            string gitHubAccountName = "jennyf190";
-            string repoName = "binaryTree";
-            string tagName = "v1.11.11";
-            string personalAccessToken = "127c0389c7a3ca4854bde31a22cf99f4285d4028";
-
-            ReleaseAutomator releaseAutomator = new ReleaseAutomator();
-            releaseAutomator.AsyncReleaseMethod(gitHubAccountName, repoName, tagName, personalAccessToken);
-            
-            
-
-            
-
-
-            Assert.;
+        
         }
     }
 }

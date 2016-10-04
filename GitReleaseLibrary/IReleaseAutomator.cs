@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GitReleaseLibrary
 {
-    interface IReleaseAutomator
+    public interface IReleaseAutomator
     {
         string gitHubAccountName { get; set; }
         string repoName { get; set; }

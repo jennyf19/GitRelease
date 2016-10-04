@@ -1,30 +1,13 @@
 ﻿using System;
 using CommandLine;
-using GitReleaseLibrary;
 using Autofac;
 
 namespace GitRelease
 {
     class Program
     {
-        private static IContainer Container { get; set; }
-
         static void Main(string[] args)
         {
-            //Dependency injection 
-            var builder = new ContainerBuilder();
-            //Register what instance of what class that should be provided for each interface with an IoC container
-            builder.RegisterType<CommandLineInputParser>().As<ICommandLineInputParser>();
-            builder.RegisterType<TagNameFormatCheck>().As<ITagNameFormatCheck>();
-            builder.RegisterType<ReleaseAutomator>().As<IReleaseAutomator>();
-            Container = builder.Build();
-
-            //Start the top level instance
-            using (var scope = Container.BeginLifetimeScope())
-            {
-                var release = scope.Resolve<IReleaseAutomator>();
-            }
-
             //Take command line parameters as input
             CommandLineInputParser options = new CommandLineInputParser();
 
@@ -35,37 +18,24 @@ namespace GitRelease
                 Console.ReadLine();
             }
 
-            //Parse the parameters
-            string gitHubAccountName = options.gitHubAccountName;
-            string repoName = options.repoName;
-            string tagName = options.tagName;
-            string personalAccessToken = options.personalAccessToken;
-
             //Determine if tagName is in the correct format (v1.11.11)
-            //If format passes, return true and continue to ReleaseAutomator
-            //If format does not pass, exit program
-            try
+            //If format passes, return true, and continue to ReleaseAutomator
+            //If format does not pass, exit
+            TagNameFormatCheck tagNameFormatCheck = new TagNameFormatCheck();
+            tagNameFormatCheck.TagNameFormat(options.tagName);
+
+            if (tagNameFormatCheck.TagNameFormat(options.tagName) == true)
             {
-                TagNameFormatCheck tagNameFormatCheck = new TagNameFormatCheck();
-                tagNameFormatCheck.TagNameFormat(tagName);
+                //If the tagName returns true, initialize the ReleaseAutomator
+                //ReleaseAutomator takes in the command line parameters and completes the repo release
+                ReleaseAutomator releaseAutomator = new ReleaseAutomator();
+                releaseAutomator.AsyncReleaseMethod(options.gitHubAccountName, options.repoName, options.tagName, options.personalAccessToken);
 
-                if (tagNameFormatCheck.TagNameFormat(tagName) == true)
-                {
-                    //If the tagName returns true, initialize the ReleaseAutomator
-                    //ReleaseAutomator takes in the command line parameters and completes the repo release
-                    ReleaseAutomator releaseAutomator = new ReleaseAutomator();
-                    releaseAutomator.AsyncReleaseMethod(gitHubAccountName, repoName, tagName, personalAccessToken);
-
-                    Console.ReadLine();
-                }
-                else
-                {
-                    Console.WriteLine("Tag name format invalid: " + tagName + "\nNeeds to be in the following format: \nv1.00.00");
-                }
+                Console.ReadLine();
             }
-            catch (Exception a1)
+            else
             {
-                Console.WriteLine(a1);
+                Console.WriteLine("Tag name format invalid: " + options.tagName + "\nNeeds to be in the following format: \nv1.00.000");
             }
         }
     }

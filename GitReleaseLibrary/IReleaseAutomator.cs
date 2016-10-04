@@ -13,7 +13,7 @@ namespace GitReleaseLibrary
         string tagName { get; set; }
         string personalAccessToken { get; set; }
 
-        void AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken);
+        Task AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken);
     }
 
 }

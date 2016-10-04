@@ -1,5 +1,6 @@
 ﻿using System;
 using Octokit;
+using System.Threading.Tasks;
 
 namespace GitReleaseLibrary
 {
@@ -10,9 +11,9 @@ namespace GitReleaseLibrary
         public string tagName { get; set; }
         public string personalAccessToken { get; set; }
 
-        public async void AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken)
+        public async Task AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken)
         {
-            GitHubClient client;
+            GitHubClient client;                
             //Test connection to GitHub API
             try
             {

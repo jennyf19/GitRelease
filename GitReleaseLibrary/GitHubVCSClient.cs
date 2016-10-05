@@ -3,7 +3,7 @@ using System;
 using Octokit;
 using System.Threading.Tasks;
 
-namespace GitReleaseLibrary
+namespace GitReleaseAutomator
 {
     public class GitHubVCSClient : IVCSClient
     {

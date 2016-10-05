@@ -88,7 +88,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="TagNameFormatCheckTest.cs" />
+    <Compile Include="TagNameFormatTest.cs" />
     <Compile Include="ReleaseAutomatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -99,9 +99,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GitReleaseLibrary\GitReleaseLibrary.csproj">
+    <ProjectReference Include="..\GitReleaseLibrary\GitReleaseAutomator.csproj">
       <Project>{75573a28-b92e-45cf-8c54-4b3d61c4db8a}</Project>
-      <Name>GitReleaseLibrary</Name>
+      <Name>GitReleaseAutomator</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

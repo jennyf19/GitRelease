@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using GitReleaseLibrary;
+using GitReleaseAutomator;
 using Octokit;
 using System.Threading.Tasks;
 using Rhino.Mocks;
@@ -19,7 +19,6 @@ namespace GitReleaseLibraryTest
             string tagName = "v1.1.1";
             string personalAccessToken = "1092urjlasakdjf;als";
 
-            
             // Mock Repository.
             var _mockRepo = MockRepository.GenerateMock<Octokit.Repository>();
             _mockRepo.Stub(x => x.Id).Return(666);
@@ -40,6 +39,10 @@ namespace GitReleaseLibraryTest
             // Stub the Repository.Release.Create() method.
             _mockClient.Stub(x => x.Repository.Release.Create(_mockRepo.Id, new NewRelease("")))
                 .Return(Task.Run(() => new Release()));
+
+            // Stub the client.Credentials() method.
+            _mockClient.Stub(x => x.User.Keys.Get.personalAccessToken;//.Get(gitHubAccountName, repoName))
+                .Return(Task.Run(() => new Credentials(personalAccessToken)));
 
             var myReleaseAutomator = new ReleaseAutomator();
             //myReleaseAutomator.client = _mockClient;

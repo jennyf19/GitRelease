@@ -1,13 +1,12 @@
 ﻿using System;
 using CommandLine;
-using Autofac;
-using GitReleaseLibrary;
+using GitReleaseAutomator;
 
 namespace GitRelease
 {
     class Program
     {
-        static void Main(string[] args)
+        static async void Main(string[] args)
         {
             //Take command line parameters as input
             CommandLineInputParser options = new CommandLineInputParser();
@@ -22,12 +21,12 @@ namespace GitRelease
             //Determine if tagName is in the correct format (v1.11.11)
             //If format passes, continue to ReleaseAutomator
             //If format does not pass, exit
-            if (TagNameFormatCheck.TagNameFormat(options.tagName))
+            if (TagNameFormat.IsValid(options.tagName))
             {
                 //Initialize the ReleaseAutomator
                 //ReleaseAutomator takes in the command line parameters and completes the repo release
                 ReleaseAutomator releaseAutomator = new ReleaseAutomator();
-                releaseAutomator.AsyncReleaseMethod(options.gitHubAccountName, options.repoName, options.tagName, options.personalAccessToken);
+                await releaseAutomator.AsyncReleaseMethod(options.gitHubAccountName, options.repoName, options.tagName, options.personalAccessToken);
             }
             else
             {

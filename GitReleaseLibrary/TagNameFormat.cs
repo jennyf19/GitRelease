@@ -1,13 +1,13 @@
 ﻿using System.Text.RegularExpressions;
 
 
-namespace GitReleaseLibrary
+namespace GitReleaseAutomator
 {
-    public class TagNameFormatCheck
+    public class TagNameFormat
     {
         private static Regex _tagNamePattern = new Regex(@"^v[1-9]\.([0-9]{1,2}\.)([0-9]{1,3})$");
 
-        public static bool TagNameFormat(string tagName)
+        public static bool IsValid(string tagName)
         {
             if (string.IsNullOrEmpty(tagName)) return false;
 

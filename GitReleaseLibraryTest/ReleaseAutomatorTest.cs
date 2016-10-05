@@ -3,97 +3,51 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GitReleaseLibrary;
 using Octokit;
 using System.Threading.Tasks;
+using Rhino.Mocks;
 
 
 namespace GitReleaseLibraryTest
 {
     [TestClass]
-    public class ReleaseAutomatorIncorrectUserNameTest
+    public class ReleaseAutomatorTest
     {
-        public string gitHubAccountName { get; set; }
-        public string repoName { get; set; }
-        public string tagName { get; set; }
-        public string personalAccessToken { get; set; }
-
-        [TestMethod]
-        public async Task AsyncReleaseAutomator()
+       [TestMethod]
+        public void AsyncReleaseMethodTest()
         {
-            GitHubClient client;
-            //Test connection to GitHub API
-            try
-            {
-                client = new GitHubClient(new ProductHeaderValue("Release"));
-            }
-            catch (AuthorizationException authExc)
-            {
-                Console.WriteLine(authExc);
-                throw authExc;
-            }
+            string gitHubAccountName = "jennyf19";
+            string repoName = "cats";
+            string tagName = "v1.1.1";
+            string personalAccessToken = "1092urjlasakdjf;als";
 
-            try
-            {
-                client.Credentials = new Credentials(personalAccessToken);
-            }
-            //Personal Access Token is invalid
-            catch (ApiException apiExc)
-            {
-                Console.WriteLine(apiExc);
-                throw (apiExc);
-            }
+            
+            // Mock Repository.
+            var _mockRepo = MockRepository.GenerateMock<Octokit.Repository>();
+            _mockRepo.Stub(x => x.Id).Return(666);
 
-            Repository result;
-            try
-            {
-                result = await client.Repository.Get(gitHubAccountName, repoName);
-            }
-            catch (AuthorizationException authExc)
-            {
-                Console.WriteLine(authExc);
-                throw (authExc);
-            }
+            // Mock GitHubClient
+            var _mockClient = MockRepository.GenerateMock<IGitHubClient>();
 
-            //Pull readMe to inclue with the release
-            string readMe;
-            try
-            {
-                readMe = await client.Repository.Content.GetReadmeHtml(gitHubAccountName, repoName);
-            }
-            catch (NotFoundException notFoundExc)
-            {
-                Console.WriteLine(notFoundExc);
-                throw (notFoundExc);
-            }
+            // TODO: Do we need to mock the constructor?  ReleaseAutomator passes in new ProductHeaderValue("")...
 
-            //Parameters used to create the release
-            var newRelease = new NewRelease(tagName);
+            // Stub the Repository.Get() method.
+            _mockClient.Stub(x => x.Repository.Get(gitHubAccountName, repoName))
+                .Return(Task.Run(() => _mockRepo));
 
-            newRelease.Name = repoName;
+            // Stub the Repository.Content.GetReadmeHtml() method.
+            _mockClient.Stub(x => x.Repository.Content.GetReadmeHtml(gitHubAccountName, repoName))
+                .Return(Task.Run(() => "Fake ReadMe string?"));
 
-            newRelease.Body = readMe;
+            // Stub the Repository.Release.Create() method.
+            _mockClient.Stub(x => x.Repository.Release.Create(_mockRepo.Id, new NewRelease("")))
+                .Return(Task.Run(() => new Release()));
 
-            newRelease.Draft = false;
+            var myReleaseAutomator = new ReleaseAutomator();
+            //myReleaseAutomator.client = _mockClient;
+            myReleaseAutomator.AsyncReleaseMethod(gitHubAccountName, repoName, tagName, personalAccessToken);
 
-            newRelease.Prerelease = false;
 
-            try
-            //Release to GitHub
-            {
-                await client.Repository.Release.Create(result.Id, newRelease);
-            }
-            catch (ApiValidationException apiExc)
-            {
-                Console.WriteLine(apiExc);
-                throw (apiExc);
-            }
-            Console.WriteLine("\nRelease of " + repoName + " complete");
-
-            Assert.Equals();
         }
-         
-        public Task AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 
 }

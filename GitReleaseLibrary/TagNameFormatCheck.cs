@@ -3,27 +3,15 @@
 
 namespace GitReleaseLibrary
 {
-    public class TagNameFormatCheck : ITagNameFormatCheck
+    public class TagNameFormatCheck
     {
-        public string tagName { get; set; }
+        private static Regex _tagNamePattern = new Regex(@"^v[1-9]\.([0-9]{1,2}\.)([0-9]{1,3})$");
 
-        public bool TagNameFormat(string tagName)
+        public static bool TagNameFormat(string tagName)
         {
-            if (tagName == null)
-            {
-                return false;
-            }
-            Regex tagNamePattern = new Regex(@"^v[1-9]\.([0-9]{0,2}\.)([0-9]{0,3})$");
+            if (string.IsNullOrEmpty(tagName)) return false;
 
-            if (Regex.IsMatch(tagName, tagNamePattern.ToString()))
-            {
-                return true;
-            }
-
-            else
-            {
-                return false;
-            }
+            return _tagNamePattern.IsMatch(tagName);
         }
     }
 }

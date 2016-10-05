@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommandLine;
+using System;
 using Octokit;
 using System.Threading.Tasks;
 
@@ -6,81 +7,52 @@ namespace GitReleaseLibrary
 {
     public class ReleaseAutomator : IReleaseAutomator
     {
-        public string gitHubAccountName { get; set; }
-        public string repoName { get; set; }
-        public string tagName { get; set; }
-        public string personalAccessToken { get; set; }
+        #region For Dependency Injection
+        //private IGitHubClient _client;
+        //public IGitHubClient client {
+        //    get
+        //    {
+        //        if (client == null)
+        //        {
+        //            GitHubClient _client = new GitHubClient(new ProductHeaderValue("GitRelease"));
+        //        }
+        //        return _client;
+        //    }
+        //    set
+        //    {
+        //        _client = value;
+        //    }
+        //}
+        #endregion
 
         public async Task AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken)
         {
-            GitHubClient client;                
-            //Test connection to GitHub API
             try
             {
-                client = new GitHubClient(new ProductHeaderValue("Release"));
-            }
-            catch (AuthorizationException authExc)
-            {
-                Console.WriteLine(authExc);
-                throw authExc;
-            }
-
-            try
-            {
+                //Test connection to GitHub API
+                GitHubClient client = new GitHubClient(new ProductHeaderValue("GitRelease"));
                 client.Credentials = new Credentials(personalAccessToken);
-            }
-            //Personal Access Token is invalid
-            catch (ApiException apiExc)
-            {
-                Console.WriteLine(apiExc);
-                throw (apiExc);
-            }
+                Repository result = await client.Repository.Get(gitHubAccountName, repoName);
 
-            Repository result;
-            try
-            {
-                result = await client.Repository.Get(gitHubAccountName, repoName);
-            }
-            catch (AuthorizationException authExc)
-            {
-                Console.WriteLine(authExc);
-                throw (authExc);
-            }
+                //Pull readMe to inclue with the release
+                string readMe = await client.Repository.Content.GetReadmeHtml(gitHubAccountName, repoName);
 
-            //Pull readMe to inclue with the release
-            string readMe;
-            try
-            {
-                readMe = await client.Repository.Content.GetReadmeHtml(gitHubAccountName, repoName);
-            }
-            catch (NotFoundException notFoundExc)
-            {
-                Console.WriteLine(notFoundExc);
-                throw (notFoundExc);
-            }
+                //Parameters used to create the release
+                var newRelease = new NewRelease(tagName);
+                newRelease.Name = repoName;
+                newRelease.Body = readMe;
+                newRelease.Draft = false;
+                newRelease.Prerelease = false;
 
-            //Parameters used to create the release
-            var newRelease = new NewRelease(tagName);
-
-            newRelease.Name = repoName;
-
-            newRelease.Body = readMe;
-
-            newRelease.Draft = false;
-
-            newRelease.Prerelease = false;
-
-            try
-            //Release to GitHub
-            {
+                //Release to GitHub
                 await client.Repository.Release.Create(result.Id, newRelease);
+                Console.WriteLine("Release of " + repoName + " complete");
             }
-            catch (ApiValidationException apiExc)
+            catch (Exception ex)
             {
-                Console.WriteLine(apiExc);
-                throw (apiExc);
+                Console.WriteLine(ex);
+                throw ex;
             }
-            Console.WriteLine("\nRelease of " + repoName + " complete");
         }
     }
 }

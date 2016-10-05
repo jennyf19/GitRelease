@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace GitReleaseLibrary
 {
-    interface ITagNameFormatCheck
+    public interface IVCSClient
     {
-        string tagName { get; set; }
-
-        bool TagNameFormat(string tagName);
+        public IVCSCredentials Credentials { get; set; }
     }
+
 }

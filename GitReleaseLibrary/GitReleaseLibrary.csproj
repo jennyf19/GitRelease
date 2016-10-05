@@ -55,11 +55,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandLineReleaseAutomator.cs" />
-    <Compile Include="ICommandLineReleaseAutomator.cs" />
-    <Compile Include="ITagNameFormatCheck.cs" />
-    <Compile Include="ReleaseAutomator.cs" />
+    <Compile Include="GitHubVCSCredentials.cs" />
     <Compile Include="IReleaseAutomator.cs" />
+    <Compile Include="GitHubVCSClient.cs" />
+    <Compile Include="IVCSCredentials.cs" />
+    <Compile Include="ReleaseAutomator.cs" />
+    <Compile Include="IVCSClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TagNameFormatCheck.cs" />
   </ItemGroup>

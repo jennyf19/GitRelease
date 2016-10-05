@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using GitReleaseAutomator;
 using Octokit;
 using System.Threading.Tasks;
@@ -11,8 +10,8 @@ namespace GitReleaseLibraryTest
     [TestClass]
     public class ReleaseAutomatorTest
     {
-       [TestMethod]
-        public void AsyncReleaseMethodTest()
+        [TestMethod]
+        public async void AsyncReleaseMethodTest()
         {
             string gitHubAccountName = "jennyf19";
             string repoName = "cats";
@@ -41,14 +40,12 @@ namespace GitReleaseLibraryTest
                 .Return(Task.Run(() => new Release()));
 
             // Stub the client.Credentials() method.
-            _mockClient.Stub(x => x.User.Keys.Get.personalAccessToken;//.Get(gitHubAccountName, repoName))
-                .Return(Task.Run(() => new Credentials(personalAccessToken)));
+            _mockClient.Stub(x => x.Connection.Credentials.AuthenticationType.ToString(personalAccessToken))
+                .Return(personalAccessToken);
 
             var myReleaseAutomator = new ReleaseAutomator();
             //myReleaseAutomator.client = _mockClient;
-            myReleaseAutomator.AsyncReleaseMethod(gitHubAccountName, repoName, tagName, personalAccessToken);
-
-
+            await myReleaseAutomator.AsyncReleaseMethod(gitHubAccountName, repoName, tagName, personalAccessToken);
         }
 
     }

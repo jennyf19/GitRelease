@@ -1,5 +1,4 @@
-﻿using CommandLine;
-using System;
+﻿using System;
 using Octokit;
 using System.Threading.Tasks;
 
@@ -8,21 +7,22 @@ namespace GitReleaseAutomator
     public class ReleaseAutomator : IReleaseAutomator
     {
         #region For Dependency Injection
-        //private IGitHubClient _client;
-        //public IGitHubClient client {
-        //    get
-        //    {
-        //        if (client == null)
-        //        {
-        //            GitHubClient _client = new GitHubClient(new ProductHeaderValue("GitRelease"));
-        //        }
-        //        return _client;
-        //    }
-        //    set
-        //    {
-        //        _client = value;
-        //    }
-        //}
+        private IGitHubClient _client;
+        public IGitHubClient client
+        {
+            get
+            {
+                if (client == null)
+                {
+                    GitHubClient _client = new GitHubClient(new ProductHeaderValue("GitRelease"));
+                }
+                return _client;
+            }
+            set
+            {
+                _client = value;
+            }
+        }
         #endregion
 
         public async Task AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken)

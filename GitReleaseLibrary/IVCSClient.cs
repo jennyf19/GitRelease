@@ -8,7 +8,7 @@ namespace GitReleaseAutomator
 {
     public interface IVCSClient
     {
-        public IVCSCredentials Credentials { get; set; }
+        IVCSCredentials Credentials { get; set; }
     }
 
 }

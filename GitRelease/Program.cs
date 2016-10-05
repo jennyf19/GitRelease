@@ -1,13 +1,20 @@
 ﻿using System;
 using CommandLine;
 using GitReleaseAutomator;
+using Nito.AsyncEx;
+
 
 namespace GitRelease
 {
     class Program
     {
-        static async void Main(string[] args)
+        static void Main(string[] args)
         {
+            AsyncContext.Run(() => MainAsync(args));
+        }
+
+        static async void MainAsync(string[] args)
+        { 
             //Take command line parameters as input
             CommandLineInputParser options = new CommandLineInputParser();
 

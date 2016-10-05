@@ -14,6 +14,6 @@ namespace GitReleaseAutomator
 
     public class GitHubVCSRepository
     {
-        public 
+       
     }
 }

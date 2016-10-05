@@ -11,12 +11,12 @@ namespace GitReleaseLibraryTest
     public class ReleaseAutomatorTest
     {
         [TestMethod]
-        public async void AsyncReleaseMethodTest()
+        public async Task AsyncReleaseMethodTest()
         {
             string gitHubAccountName = "jennyf19";
             string repoName = "cats";
             string tagName = "v1.1.1";
-            string personalAccessToken = "1092urjlasakdjf;als";
+            string personalAccessToken = "randomPersonalAccessToken";
 
             // Mock Repository.
             var _mockRepo = MockRepository.GenerateMock<Octokit.Repository>();
@@ -47,7 +47,5 @@ namespace GitReleaseLibraryTest
             //myReleaseAutomator.client = _mockClient;
             await myReleaseAutomator.AsyncReleaseMethod(gitHubAccountName, repoName, tagName, personalAccessToken);
         }
-
     }
-
 }

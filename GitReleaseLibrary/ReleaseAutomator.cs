@@ -25,7 +25,8 @@ namespace GitReleaseAutomator
         }
         #endregion
 
-        public async Task AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken)
+        public async Task AsyncReleaseMethod
+        (string gitHubAccountName, string repoName, string tagName, string personalAccessToken)
         {
             try
             {
@@ -34,7 +35,7 @@ namespace GitReleaseAutomator
                 client.Credentials = new Credentials(personalAccessToken);
                 Repository result = await client.Repository.Get(gitHubAccountName, repoName);
 
-                //Pull readMe to inclue with the release
+                //Pull readMe to include with the release
                 string readMe = await client.Repository.Content.GetReadmeHtml(gitHubAccountName, repoName);
 
                 //Parameters used to create the release

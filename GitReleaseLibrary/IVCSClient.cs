@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace GitReleaseAutomator
 {
-    public interface IReleaseAutomator
+    public interface IVCSClient
     {
-        Task AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken);
+        IVCSCredentials Credentials { get; set; }
     }
 
 }

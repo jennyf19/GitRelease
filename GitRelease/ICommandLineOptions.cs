@@ -1,8 +1,8 @@
 ﻿using CommandLine;
 
-namespace GitReleaseLibrary
+namespace GitRelease
 {
-    interface ICommandLineInputParser
+    public interface ICommandLineInputParser
     {
         [Option()]
         string gitHubAccountName { get; set; }

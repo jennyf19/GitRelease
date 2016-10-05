@@ -1,88 +1,58 @@
 ﻿using System;
 using Octokit;
+using System.Threading.Tasks;
 
-namespace GitReleaseLibrary
+namespace GitReleaseAutomator
 {
     public class ReleaseAutomator : IReleaseAutomator
     {
-        public string gitHubAccountName { get; set; }
-        public string repoName { get; set; }
-        public string tagName { get; set; }
-        public string personalAccessToken { get; set; }
-        
-        public async void AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken)
+        #region For Dependency Injection
+        private IGitHubClient _client;
+        public IGitHubClient client
         {
-            //Test connection to GitHub API
+            get
+            {
+                if (client == null)
+                {
+                    GitHubClient _client = new GitHubClient(new ProductHeaderValue("GitRelease"));
+                }
+                return _client;
+            }
+            set
+            {
+                _client = value;
+            }
+        }
+        #endregion
+
+        public async Task AsyncReleaseMethod(string gitHubAccountName, string repoName, string tagName, string personalAccessToken)
+        {
             try
-            //ApiException e1
             {
-                var client = new GitHubClient(new ProductHeaderValue("Release"));
+                //Test connection to GitHub API
+                GitHubClient client = new GitHubClient(new ProductHeaderValue("GitRelease"));
+                client.Credentials = new Credentials(personalAccessToken);
+                Repository result = await client.Repository.Get(gitHubAccountName, repoName);
 
-                try
-                //ApiException e2
-                {
-                    var tokenAuth = new Credentials(personalAccessToken);
+                //Pull readMe to inclue with the release
+                string readMe = await client.Repository.Content.GetReadmeHtml(gitHubAccountName, repoName);
 
-                    client.Credentials = tokenAuth;
-                }
-                //Personal Access Token is invalid
-                catch (ApiException e2)
-                {
-                    Console.WriteLine(e2);
-                }
+                //Parameters used to create the release
+                var newRelease = new NewRelease(tagName);
+                newRelease.Name = repoName;
+                newRelease.Body = readMe;
+                newRelease.Draft = false;
+                newRelease.Prerelease = false;
 
-                try
-                //AuthorizationException e3
-                {
-                    Repository result = await client.Repository.Get(gitHubAccountName, repoName);
-
-                    try
-                    //ApiException e4
-                    {
-                        string readMe = await client.Repository.Content.GetReadmeHtml(gitHubAccountName, repoName);
-                        
-
-                        //All of the set parameters below must be correct (not case sensitive)
-                        //If the TagName is equal to a tag name already used in a release, an exception will occur
-                        //Create Tag
-
-                        var newRelease = new NewRelease(tagName);
-
-                        newRelease.Name = repoName;
-
-                        newRelease.Body = readMe.ToString();
-
-                        newRelease.Draft = false;
-
-                        newRelease.Prerelease = false;
-
-                        try
-                        //ApiValidationException e5
-                        {
-                            await client.Repository.Release.Create(result.Id, newRelease);
-
-                            Console.WriteLine("\nRelease of " + repoName + " complete");
-                        }
-                        catch (ApiValidationException e5)
-                        {
-                            Console.WriteLine(e5);
-                        }
-                    }
-                    catch (NotFoundException e4)
-                    {
-                        Console.WriteLine(e4);
-                    }
-                }
-                catch (NotFoundException e3)
-                {
-                    Console.WriteLine(e3);
-                }
+                //Release to GitHub
+                await client.Repository.Release.Create(result.Id, newRelease);
+                Console.WriteLine("Release of " + repoName + " complete");
             }
-            catch (AuthorizationException e1)
+            catch (Exception ex)
             {
-                Console.WriteLine(e1);
+                Console.WriteLine(ex);
+                throw ex;
             }
-
         }
     }
 }

@@ -25,7 +25,7 @@ namespace GitRelease
                 Environment.Exit(Parser.DefaultExitCodeFail);
             }
 
-            //Determine if tagName is in the correct format (v1.11.11)
+            //Determine if tagName is in the correct format (vd.dd.dd)
             //If format passes, continue to ReleaseAutomator
             //If format does not pass, exit
             if (TagNameFormat.IsValid(options.tagName))
@@ -37,7 +37,7 @@ namespace GitRelease
             }
             else
             {
-                Console.WriteLine("Tag name format invalid: " + options.tagName + "\nUse Semantic Versioning");
+                Console.WriteLine("Tag name format invalid: " + options.tagName + "\nUse Semantic Versioning (vd.dd.dd).");
             }
             Console.ReadLine();
         }

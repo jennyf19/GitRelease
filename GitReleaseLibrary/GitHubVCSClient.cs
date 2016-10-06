@@ -8,12 +8,9 @@ namespace GitReleaseAutomator
     public class GitHubVCSClient : IVCSClient
     {
         public IVCSCredentials Credentials { get; set; }
-
-
     }
 
     public class GitHubVCSRepository
     {
-       
     }
 }

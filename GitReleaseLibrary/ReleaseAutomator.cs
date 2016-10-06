@@ -14,7 +14,7 @@ namespace GitReleaseAutomator
             {
                 if (client == null)
                 {
-                    GitHubClient _client = new GitHubClient(new ProductHeaderValue("GitRelease"));
+                    _client = new GitHubClient(new ProductHeaderValue("GitRelease"));
                 }
                 return _client;
             }

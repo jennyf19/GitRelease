@@ -13,8 +13,8 @@ namespace GitReleaseLibraryTest
         [TestMethod]
         public async Task AsyncReleaseMethodTest()
         {
-            string gitHubAccountName = "jennyf19";
-            string repoName = "cats";
+            string gitHubAccountName = "AccountName";
+            string repoName = "RepoName";
             string tagName = "v1.1.1";
             string personalAccessToken = "randomPersonalAccessToken";
 

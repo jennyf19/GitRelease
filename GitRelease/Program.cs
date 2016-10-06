@@ -37,7 +37,7 @@ namespace GitRelease
             }
             else
             {
-                Console.WriteLine("Tag name format invalid: " + options.tagName + "\nNeeds to be in the following format: \nv1.00.000");
+                Console.WriteLine("Tag name format invalid: " + options.tagName + "\nUse Symantic Versioning");
             }
             Console.ReadLine();
         }

@@ -2,17 +2,18 @@
 using Octokit;
 using System.Threading.Tasks;
 
+// ReSharper disable once CheckNamespace
 namespace GitReleaseAutomator
 {
     public class ReleaseAutomator : IReleaseAutomator
     {
         #region For Dependency Injection
         private IGitHubClient _client;
-        public IGitHubClient client
+        public IGitHubClient Client
         {
             get
             {
-                if (client == null)
+                if (_client == null)
                 {
                     _client = new GitHubClient(new ProductHeaderValue("GitRelease"));
                 }
@@ -52,7 +53,7 @@ namespace GitReleaseAutomator
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                throw ex;
+                throw;
             }
         }
     }

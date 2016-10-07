@@ -50,10 +50,6 @@
       <HintPath>..\packages\Octokit.0.22.0\lib\net45\Octokit.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <HintPath>..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net.Http" />
   </ItemGroup>
@@ -73,7 +69,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="TagNameFormatTest.cs" />
-    <Compile Include="ReleaseAutomatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

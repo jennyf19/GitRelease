@@ -6,7 +6,7 @@ using Rhino.Mocks;
 
 
 namespace GitReleaseLibraryTest
-{
+{   
     [TestClass]
     public class ReleaseAutomatorTest
     {
@@ -19,9 +19,15 @@ namespace GitReleaseLibraryTest
             string personalAccessToken = "randomPersonalAccessToken";
 
             // Mock Repository.
-            var _mockRepo = MockRepository.GenerateMock<Octokit.Repository>();
-            _mockRepo.Stub(x => x.Id).Return(666);
+            TestRepository Repository = new TestRepository();
+            Repository.Id.Equals
 
+            //var _mockRepo = MockRepository.GenerateStub<Octokit.Repository>();
+            //_mockRepo.Stub(x => x.Id).Return(Repository.Id);
+
+            Assert.AreEqual(Repository.Id, 666);
+
+            /*
             // Mock GitHubClient
             var _mockClient = MockRepository.GenerateMock<IGitHubClient>();
 
@@ -47,6 +53,15 @@ namespace GitReleaseLibraryTest
             var myReleaseAutomator = new ReleaseAutomator();
             myReleaseAutomator.client = _mockClient;
             await myReleaseAutomator.AsyncReleaseMethod(gitHubAccountName, repoName, tagName, personalAccessToken);
+            */
+        }
+        private class TestRepository : Repository
+        {
+            public int mockId { get; private set; }
+            protected void Repository(int Id)
+            {
+                this.mockId = 666;
+            }
         }
     }
 }

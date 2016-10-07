@@ -101,7 +101,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GitReleaseLibrary\GitReleaseAutomator.csproj">
+    <ProjectReference Include="..\GitReleaseAutomator\GitReleaseAutomator.csproj">
       <Project>{75573a28-b92e-45cf-8c54-4b3d61c4db8a}</Project>
       <Name>GitReleaseAutomator</Name>
     </ProjectReference>

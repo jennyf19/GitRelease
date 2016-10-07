@@ -2,7 +2,6 @@
 using Octokit;
 using System.Threading.Tasks;
 
-// ReSharper disable once CheckNamespace
 namespace GitReleaseAutomator
 {
     public class ReleaseAutomator : IReleaseAutomator

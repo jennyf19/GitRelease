@@ -25,7 +25,8 @@ namespace GitReleaseLibraryTest
             // Mock GitHubClient
             var _mockClient = MockRepository.GenerateMock<IGitHubClient>();
 
-            // TODO: Do we need to mock the constructor?  ReleaseAutomator passes in new ProductHeaderValue("")...
+            // Mock ProductHeaderValue
+            var _mockHeaderValue = MockRepository.GenerateMock<ProductHeaderValue>();
 
             // Stub the Repository.Get() method.
             _mockClient.Stub(x => x.Repository.Get(gitHubAccountName, repoName))
@@ -44,7 +45,7 @@ namespace GitReleaseLibraryTest
                 .Return(personalAccessToken);
 
             var myReleaseAutomator = new ReleaseAutomator();
-            //myReleaseAutomator.client = _mockClient;
+            myReleaseAutomator.client = _mockClient;
             await myReleaseAutomator.AsyncReleaseMethod(gitHubAccountName, repoName, tagName, personalAccessToken);
         }
     }

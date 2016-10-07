@@ -4,7 +4,7 @@ using GitReleaseAutomator;
 using Nito.AsyncEx;
 
 
-namespace GitRelease
+namespace GitReleaseConsole
 {
     class Program
     {

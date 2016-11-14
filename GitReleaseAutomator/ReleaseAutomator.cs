@@ -28,7 +28,7 @@ namespace GitReleaseAutomator
 
                 //Release to GitHub
                 await client.Repository.Release.Create(result.Id, newRelease);
-                Console.WriteLine("Release of " + repoName + " complete");
+                Console.WriteLine("Release of " + repoName + " complete\nVersion number: " + tagName);
             }
             catch (Exception ex)
             {

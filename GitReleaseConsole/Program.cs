@@ -3,8 +3,7 @@ using CommandLine;
 using GitReleaseAutomator;
 using Nito.AsyncEx;
 
-
-namespace GitReleaseConsole
+namespace GitRelease
 {
     class Program
     {

@@ -1,6 +1,6 @@
 ﻿using CommandLine;
 
-namespace GitReleaseConsole
+namespace GitRelease
 {
     public interface ICommandLineInputParser
     {

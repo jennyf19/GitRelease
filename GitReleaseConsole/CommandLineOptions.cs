@@ -1,7 +1,7 @@
 ﻿using CommandLine;
 using CommandLine.Text;
 
-namespace GitReleaseConsole
+namespace GitRelease
 {
     public class CommandLineInputParser : ICommandLineInputParser
     {

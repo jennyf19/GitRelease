@@ -1,7 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using GitReleaseAutomator;
+﻿using GitReleaseAutomator;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace GitReleaseAutomatorTest
+namespace GitReleaseLibraryTest
 {
     [TestClass]
     public class TagNameFormatTest
